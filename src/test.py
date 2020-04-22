@@ -1,5 +1,6 @@
 import sys 
 import os.path
+import os
 import json
 sys.path.append('src/')
 
@@ -17,4 +18,8 @@ def main():
     
 
 if __name__== "__main__":
-   main()
+   #main()
+   path = "C:\\Users\\Gauthier\\Downloads\\Music"
+   child_paths = os.listdir(path)
+   [print(path + os.path.sep + x) for x in child_paths]
+   [print(x.split(".")[-1]) for x in child_paths]

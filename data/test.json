@@ -3,7 +3,12 @@
     "sources": [
       {
         "path": "E:\\Dev\\bookmarks_01_03_20.html",
-        "overwrite": false
+        "options" :{
+          "overwrite": false,
+          "sizelimit": -1,
+          "forbidden_extensions":["txt"]
+        }
+        
       }
     ]
   }
