@@ -30,13 +30,10 @@ def main():
                 print("Error in Plan File. Invalid source")
                 sys.exit(1) 
 
-            move(source["path"],source["options"],target_path,1)
+            limit = len(source["path"].split(os.path.sep)) -1 
+            move(source["path"],source["options"],target_path,limit)
 
 
-
-
-#    new_path = [ el for i,el in enumerate(path.split(os.path.sep)) if i > 3]
-#    print(os.path.sep.join(new_path))
 
 def move(path,options,target_path,depth) : 
 
@@ -58,34 +55,35 @@ def move(path,options,target_path,depth) :
         cut_path_list = [ el for i,el in enumerate(path.split(os.path.sep)) if i >= depth ]
         
         if not options["overwrite"] : 
-        
+            
             cut_path = os.path.sep.join(cut_path_list)
             
             if os.path.exists(target_path + os.path.sep + cut_path):
                 print("not overwrite")
                 return  
-
-        cut_path_list_copy = cut_path_list.copy()
-        cut_path_list_copy.pop(-1)
-        dir_to_create = target_path + os.path.sep + os.path.sep.join(cut_path_list_copy)
-        print("CREATED ",dir_to_create)
-        os.makedirs(dir_to_create)
-
+              
+        # get the folder path of the final 
         final_target_path = target_path + os.path.sep + os.path.sep.join(cut_path_list)
-        print(final_target_path)
-        shutil.copy(path,final_target_path) # TODO Fix error 
+        final_target_path_list = [el for el in final_target_path.split(os.path.sep)] 
+        final_target_path_list.pop(-1)
+        folder_path = os.path.sep.join(final_target_path_list)
+  
+        if not os.path.exists(folder_path) :
+            os.makedirs(folder_path)
+        shutil.copy(path,final_target_path)
         
     elif os.path.isdir(path) :
 
         entries = [path + os.path.sep + x for x in os.listdir(path)]
 
         for entry in entries : 
-            move(entry,options,target_path,depth+1)
+            move(entry,options,target_path,depth)
 
 def check_parameter() :
     if len(sys.argv) <= 1:
         print("Wrong input. Input should be in form : SaveProgram PlanPath")
         sys.exit(1) 
+
 
 if __name__== "__main__":
    main()
