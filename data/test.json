@@ -2,10 +2,10 @@
     "target": "C:\\Users\\Gauthier\\Downloads",
     "sources": [
       {
-        "path": "E:\\Dev\\bookmarks_01_03_20.html",
+        "path": "E:\\Dev\\SFLore",
         "options" :{
           "overwrite": false,
-          "sizelimit": -1,
+          "size_limit": -1,
           "forbidden_extensions":["txt"]
         }
         
