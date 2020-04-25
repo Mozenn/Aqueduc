@@ -3,6 +3,7 @@ import os.path
 import os 
 import json 
 import shutil
+import datetime
 
 def main():
 
@@ -33,24 +34,24 @@ def main():
             limit = len(source["path"].split(os.path.sep)) -1 
             move(source["path"],source["options"],target_path,limit)
 
-
+            if source["options"]["move"] and not os.path.isfile(source["path"]) : 
+                shutil.rmtree(source["path"]) 
 
 def move(path,options,target_path,depth) : 
 
     if os.path.isfile(path) : 
 
-        extension = path.split(".")[-1]
-
-        if extension in options["forbidden_extensions"] : 
+        if extension_forbidden(path,options): 
             print("forbidden extension")
             return 
 
-        file_size = os.path.getsize(path)
-        if options["size_limit"] != -1 and file_size >= options["size_limit"]:
+        if file_toolarge(path,options):
             print("too large")
             return 
 
-        # TODO check last modification time =>os.path.getmtime(path)
+        if file_not_modified_since_date(path,options):
+            print("No modification since date")
+            return 
 
         cut_path_list = [ el for i,el in enumerate(path.split(os.path.sep)) if i >= depth ]
         
@@ -70,7 +71,11 @@ def move(path,options,target_path,depth) :
   
         if not os.path.exists(folder_path) :
             os.makedirs(folder_path)
-        shutil.copy(path,final_target_path)
+        
+        if options["move"] : 
+            shutil.move(path,final_target_path)
+        else :
+            shutil.copy(path,final_target_path)
         
     elif os.path.isdir(path) :
 
@@ -83,6 +88,29 @@ def check_parameter() :
     if len(sys.argv) <= 1:
         print("Wrong input. Input should be in form : SaveProgram PlanPath")
         sys.exit(1) 
+
+def extension_forbidden(path,options) : 
+
+    extension = path.split(".")[-1]
+    return extension in options["forbidden_extensions"] 
+
+def file_toolarge(path,options) : 
+
+    file_size = os.path.getsize(path)
+    return options["size_limit"] != -1 and file_size >= options["size_limit"]
+
+def file_not_modified_since_date(path,options): 
+
+    sec_since_epoch_param = None 
+
+    try : 
+        sec_since_epoch_param = datetime.datetime.strptime(options["last_date_allowed"], "%d %m %Y %H").timestamp() 
+    except ValueError : 
+        sys.exit("Invalid last_date_allowed option in parameter file") 
+    
+    sec_since_epoch_file = os.path.getmtime(path)
+
+    return sec_since_epoch_file < sec_since_epoch_param
 
 
 if __name__== "__main__":
