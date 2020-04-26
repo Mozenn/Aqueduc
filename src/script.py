@@ -1,3 +1,7 @@
+"""
+this is the module docstring 
+"""
+
 import sys 
 import os.path
 import os 
@@ -5,9 +9,12 @@ import json
 import shutil
 import datetime
 
+
 def main():
 
-    check_parameter() 
+    if not valid_parameter() :
+        print("Wrong input. Input should be in form : SaveProgram PlanPath")
+        sys.exit(1) 
 
     plan_path = sys.argv[1]
     
@@ -37,8 +44,19 @@ def main():
             if source["options"]["move"] and not os.path.isfile(source["path"]) : 
                 shutil.rmtree(source["path"]) 
 
-def move(path,options,target_path,depth) : 
 
+def move(path : str,options,target_path,depth) : 
+
+    """ Moves a file or a folder recursivly depending on the options parameter 
+
+    Args:
+    path (str): The first parameter.
+    options (:obj:`str`, optional): The second parameter. Defaults to None.
+        Second line of description should be indented.
+    *args: Variable length argument list.
+    **kwargs: Arbitrary keyword arguments.
+
+    """
     if os.path.isfile(path) : 
 
         if extension_forbidden(path,options): 
@@ -84,20 +102,27 @@ def move(path,options,target_path,depth) :
         for entry in entries : 
             move(entry,options,target_path,depth)
 
-def check_parameter() :
-    if len(sys.argv) <= 1:
-        print("Wrong input. Input should be in form : SaveProgram PlanPath")
-        sys.exit(1) 
+
+def valid_parameter() :
+    """ Check console argument validity 
+
+    Returns:
+        bool: True if there is only one argument, False otherwise 
+    """
+    return len(sys.argv) != 1
+
 
 def extension_forbidden(path,options) : 
 
     extension = path.split(".")[-1]
     return extension in options["forbidden_extensions"] 
 
+
 def file_toolarge(path,options) : 
 
     file_size = os.path.getsize(path)
     return options["size_limit"] != -1 and file_size >= options["size_limit"]
+
 
 def file_not_modified_since_date(path,options): 
 
