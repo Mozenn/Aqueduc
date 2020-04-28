@@ -1,13 +1,10 @@
-"""
-this is the module docstring 
-"""
-
 import sys 
 import os.path
 import os 
 import json 
 import shutil
 import datetime
+from typing import Dict,Any
 
 
 def main():
@@ -45,18 +42,9 @@ def main():
                 shutil.rmtree(source["path"]) 
 
 
-def move(path : str,options,target_path,depth) : 
+def move(path: str, options: Dict[str,Any], target_path: str, depth : int) : 
 
-    """ Moves a file or a folder recursivly depending on the options parameter 
 
-    Args:
-    path (str): The first parameter.
-    options (:obj:`str`, optional): The second parameter. Defaults to None.
-        Second line of description should be indented.
-    *args: Variable length argument list.
-    **kwargs: Arbitrary keyword arguments.
-
-    """
     if os.path.isfile(path) : 
 
         if extension_forbidden(path,options): 
@@ -103,7 +91,7 @@ def move(path : str,options,target_path,depth) :
             move(entry,options,target_path,depth)
 
 
-def valid_parameter() :
+def valid_parameter() -> bool:
     """ Check console argument validity 
 
     Returns:
@@ -112,19 +100,19 @@ def valid_parameter() :
     return len(sys.argv) != 1
 
 
-def extension_forbidden(path,options) : 
+def extension_forbidden(path: str, options: Dict[str,Any]) -> bool: 
 
     extension = path.split(".")[-1]
     return extension in options["forbidden_extensions"] 
 
 
-def file_toolarge(path,options) : 
+def file_toolarge(path: str, options: Dict[str,Any]) -> bool: 
 
     file_size = os.path.getsize(path)
     return options["size_limit"] != -1 and file_size >= options["size_limit"]
 
 
-def file_not_modified_since_date(path,options): 
+def file_not_modified_since_date(path: str, options: Dict[str,Any]) -> bool: 
 
     sec_since_epoch_param = None 
 
