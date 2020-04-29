@@ -136,3 +136,7 @@ dmypy.json
 
 # vscode 
 .vscode/*
+
+# dev 
+
+src/test.py 
