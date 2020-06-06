@@ -35,10 +35,11 @@ def main():
                 print("Error in Plan File. Invalid source")
                 sys.exit(1) 
 
+            isFile = os.path.isfile(source["path"])
             limit = len(source["path"].split(os.path.sep)) -1 
             move(source["path"],source["options"],target_path,limit)
 
-            if source["options"]["move"] and not os.path.isfile(source["path"]) : 
+            if source["options"]["move"] and not isFile : 
                 shutil.rmtree(source["path"]) 
 
 

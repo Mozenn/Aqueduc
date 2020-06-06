@@ -1,27 +1,25 @@
 {
-    "target": "C:\\Users\\Gauthier\\Downloads\\Test",
-    "sources": [
-      {
-        "path": "E:\\Dev\\Test2",
-        "options" :{
-          "overwrite": false,
-          "move": true,
-          "size_limit": -1,
-          "forbidden_extensions":[],
-          "last_date_allowed":"20 04 2020 12"
-        }
-        
-      },
-      {
-        "path": "E:\\Dev\\bookmarks_08_03_20.html",
-        "options" :{
-          "overwrite": false,
-          "move": false,
-          "size_limit": -1,
-          "forbidden_extensions":[],
-          "last_date_allowed":"20 04 2020 12"
-        }
-        
+  "target": "C:\\Users\\Gauthier\\Downloads\\Test",
+  "sources": [
+    {
+      "path": "E:\\Dev\\Test2",
+      "options": {
+        "overwrite": false,
+        "move": true,
+        "size_limit": -1,
+        "forbidden_extensions": [],
+        "last_date_allowed": "20 04 2020 12"
       }
-    ]
-  }
+    },
+    {
+      "path": "E:\\Dev\\bookmarks_08_03_20.html",
+      "options": {
+        "overwrite": false,
+        "move": false,
+        "size_limit": -1,
+        "forbidden_extensions": [],
+        "last_date_allowed": "20 04 2020 12"
+      }
+    }
+  ]
+}
