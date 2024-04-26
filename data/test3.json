@@ -1,0 +1,15 @@
+{
+  "target": "C:\\Users\\Gauthier\\Downloads\\Test",
+  "sources": [
+    {
+      "path": "C:\\Users\\Gauthier\\Downloads\\test.txt",
+      "options": {
+        "overwrite": false,
+        "move": true,
+        "size_limit": -1,
+        "forbidden_extensions": [],
+        "last_date_allowed": "20 04 2020 12"
+      }
+    }
+  ]
+}

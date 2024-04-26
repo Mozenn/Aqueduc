@@ -34,6 +34,7 @@ Configurations files are in JSON format following this structure:
   - path (str): Path of the file or folder to move
   - options
     - overwrite (boolean): true to overwrite the file in target destination if it already exists
+    - removeExisting (boolean): true to remove the file in target destination if it already exists
     - move (boolean): true to move, false to copy
     - size_limit (number): size limit in bytes. Files having a size above this limit will not be moved/copied to target
     - forbidden_extensions(array): file having one of the specified extension will not be moved/copied to target

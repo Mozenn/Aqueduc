@@ -5,6 +5,7 @@
       "path": "E:\\Dev\\Test2",
       "options": {
         "overwrite": false,
+        "removeExisting": false,
         "move": true,
         "size_limit": -1,
         "forbidden_extensions": [],

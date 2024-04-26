@@ -4,6 +4,7 @@ import os
 import json 
 import shutil
 import datetime
+import time
 from typing import Dict,Any
 
 
@@ -18,7 +19,6 @@ def main():
     if not(os.path.exists(plan_path)) or not(os.path.isfile(plan_path)):
         print("Wrong input. Invalid Plan File")
         sys.exit(1) 
-
 
     with open(plan_path) as plan_file: 
         
@@ -35,6 +35,9 @@ def main():
                 print("Error in Plan File. Invalid source")
                 sys.exit(1) 
 
+            if source["options"]["removeExisting"]:
+                try_remove_existing(source["path"],target_path)
+
             isFile = os.path.isfile(source["path"])
             limit = len(source["path"].split(os.path.sep)) -1 
             move(source["path"],source["options"],target_path,limit)
@@ -45,30 +48,28 @@ def main():
 
 def move(path: str, options: Dict[str,Any], target_path: str, depth : int) : 
 
-
     if os.path.isfile(path) : 
 
         if extension_forbidden(path,options): 
             print("forbidden extension")
-            return 
+            sys.exit(1) 
 
         if file_toolarge(path,options):
             print("too large")
-            return 
+            sys.exit(1) 
 
         if file_not_modified_since_date(path,options):
             print("No modification since date")
-            return 
+            sys.exit(1) 
 
         cut_path_list = [ el for i,el in enumerate(path.split(os.path.sep)) if i >= depth ]
-        
+
         if not options["overwrite"] : 
             
             cut_path = os.path.sep.join(cut_path_list)
-            
             if os.path.exists(target_path + os.path.sep + cut_path):
-                print("not overwrite")
-                return  
+                print("Overwrite prevented")
+                sys.exit(0) 
               
         # get the folder path of the final 
         final_target_path = target_path + os.path.sep + os.path.sep.join(cut_path_list)
@@ -85,6 +86,10 @@ def move(path: str, options: Dict[str,Any], target_path: str, depth : int) :
             shutil.copy(path,final_target_path)
         
     elif os.path.isdir(path) :
+
+        if os.path.isfile(target_path):
+            print("Cannot move folder in a file")
+            return
 
         entries = [path + os.path.sep + x for x in os.listdir(path)]
 
@@ -126,6 +131,16 @@ def file_not_modified_since_date(path: str, options: Dict[str,Any]) -> bool:
 
     return sec_since_epoch_file < sec_since_epoch_param
 
+def try_remove_existing(path: str, target: str) -> bool:
+    if os.path.isfile(target):
+        os.remove(target)
+        return True
+    elif os.path.isdir(path) and os.path.isdir(target):
+        final_path = target + os.path.sep + path.split(os.path.sep).pop()
+        if(os.path.isdir(final_path)):
+            shutil.rmtree(final_path)
+            return True
+    return False
 
 if __name__== "__main__":
    main()
