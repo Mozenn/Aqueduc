@@ -8,7 +8,7 @@ import time
 from typing import Dict,Any
 
 
-def main():
+def run():
 
     if not valid_parameter() :
         print("Wrong input. Input should be in form : SaveProgram PlanPath")
@@ -132,6 +132,7 @@ def file_not_modified_since_date(path: str, options: Dict[str,Any]) -> bool:
     return sec_since_epoch_file < sec_since_epoch_param
 
 def try_remove_existing(path: str, target: str) -> bool:
+    print("Path", path, target)
     if os.path.isfile(target):
         os.remove(target)
         return True
@@ -141,6 +142,3 @@ def try_remove_existing(path: str, target: str) -> bool:
             shutil.rmtree(final_path)
             return True
     return False
-
-if __name__== "__main__":
-   main()

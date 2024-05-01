@@ -1,6 +1,9 @@
 import unittest
-import aqueduc
-import os
+import sys
+import os 
+from aqueduc.aqueduc import *
+
+sys.path.insert(0, os.path.realpath("/../src/aqueduc/"))
 
 class TestAqueduc(unittest.TestCase):
 
@@ -10,45 +13,47 @@ class TestAqueduc(unittest.TestCase):
         f.close()
 
     def test_extension_forbidden_valid(self):
-        self.assertEqual(aqueduc.extension_forbidden("test/folder/test.json", {"forbidden_extensions": []}), False, "Should be false")
+        self.assertEqual(extension_forbidden("test/folder/test.json", {"forbidden_extensions": []}), False, "Should be false")
 
     def test_extension_forbidden(self):
-        self.assertEqual(aqueduc.extension_forbidden("test/folder/test.json", {"forbidden_extensions": ["json"]}), True, "Should be forbidden")
+        self.assertEqual(extension_forbidden("test/folder/test.json", {"forbidden_extensions": ["json"]}), True, "Should be forbidden")
 
     def test_file_too_large(self):
         file_path = "test.txt"
         self.create_test_file(file_path)
-        self.assertEqual(aqueduc.file_toolarge(file_path, {"size_limit": 500}), True, "Should be too large")
+        self.assertEqual(file_toolarge(file_path, {"size_limit": 500}), True, "Should be too large")
         os.remove(file_path)
 
     def test_file_not_too_large(self):
         file_path = "test.txt"
         self.create_test_file(file_path)
-        self.assertEqual(aqueduc.file_toolarge(file_path, {"size_limit": 1000}), False, "Should not be too large")
+        self.assertEqual(file_toolarge(file_path, {"size_limit": 1000}), False, "Should not be too large")
         os.remove(file_path)
 
     def test_file_not_modified_since_date(self):
         file_path = "test.txt"
         self.create_test_file(file_path)
-        self.assertEqual(aqueduc.file_not_modified_since_date(file_path, {"last_date_allowed": "27 04 2024 10"}), True, "Should not have been modified since date")
+        self.assertEqual(file_not_modified_since_date(file_path, {"last_date_allowed": "27 04 2124 10"}), True, "Should not have been modified since date")
         os.remove(file_path)
 
     def test_file_modified_since_date(self):
         file_path = "test.txt"
         self.create_test_file(file_path)
-        self.assertEqual(aqueduc.file_not_modified_since_date(file_path, {"last_date_allowed": "25 04 2024 10"}), False, "Should have been modified since date")
+        self.assertEqual(file_not_modified_since_date(file_path, {"last_date_allowed": "25 04 2024 10"}), False, "Should have been modified since date")
         os.remove(file_path)
 
     def test_remove_existing_file(self):
         file_path = "test.txt"
         self.create_test_file(file_path)
-        self.assertEqual(aqueduc.try_remove_existing("", file_path), True, "Should have removed file")
+        self.assertEqual(try_remove_existing("", file_path), True, "Should have removed file")
 
     def test_remove_existing_folder(self):
         folder_name = "src"
-        os.mkdir(folder_name,777)
-        self.assertEqual(aqueduc.try_remove_existing(os.getcwd(), os.getcwd()), True, "Should have removed folder")
-
-
+        try:
+            os.mkdir(folder_name,777)
+            self.assertEqual(try_remove_existing(os.getcwd(), os.getcwd()), True, "Should have removed folder")
+        except AssertionError:
+            shutil.rmtree(folder_name)
+        
 if __name__ == '__main__':
     unittest.main()

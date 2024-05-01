@@ -4,8 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aqueduc"
-version = "1.0.0"
-description = "Read the latest Real Python tutorials"
+version = "1.0.8"
 readme = "README.md"
 authors = [{ name = "Mozenn"}]
 license = { file = "LICENSE" }
@@ -14,4 +13,4 @@ license = { file = "LICENSE" }
 Homepage = "https://github.com/Mozenn/aqueduc"
 
 [project.scripts]
-aqueduc = "reader.__main__:main"
+aqueduc = "aqueduc.__main__:main"
